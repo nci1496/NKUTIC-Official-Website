@@ -61,17 +61,35 @@
         <h2>核心代码</h2>
 
 <pre><code>
-// 示例：分形树递归
-void drawTree(float x, float y, float angle, int depth) {
-    if (depth == 0) return;
+// 分形树递归核心
+void FractalTree::generateBranchesLessRandom(Vec2 pos, double length, double angle, int depth)
+{
 
-    float x2 = x + cos(angle) * depth * 10;
-    float y2 = y + sin(angle) * depth * 10;
+    if (depth <= 0) return;
 
-    drawLine(x, y, x2, y2);
+    // 计算终点
+    Vec2 end = pos + Vec2(length * cos(angle), length * sin(angle));
 
-    drawTree(x2, y2, angle - 0.3, depth - 1);
-    drawTree(x2, y2, angle + 0.3, depth - 1);
+    if (depth <= 0 || length < 3)
+    {
+        return;
+    }
+    if (branches.size() > 5000)
+    {
+        return;
+    }
+
+    // 存储这条树枝
+    addBranch(pos, end, depth, length, angle);
+
+    // 随机变化：长度和角度
+    double newLength = length * g_Random.range(0.65, 0.75);
+    double angleOffset = g_Random.range(-5.0, 5.0) * M_PI / 180.0;
+
+    // 递归生成左右分支
+    generateBranchesLessRandom(end, newLength, angle + branchAngle + angleOffset, depth - 1);
+    generateBranchesLessRandom(end, newLength, angle - branchAngle + angleOffset, depth - 1);
+
 }
 </code></pre>
 
@@ -81,7 +99,7 @@ void drawTree(float x, float y, float angle, int depth) {
     <section>
         <h2>项目收获</h2>
         <p>
-            通过该项目，我深入理解了递归结构与图形生成的关系，
+            通过该项目，深入理解了递归结构与图形生成的关系，
             并提升了对复杂系统可视化的设计能力。
         </p>
     </section>

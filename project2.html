@@ -61,18 +61,78 @@
         <h2>核心代码</h2>
 
 <pre><code>
-// 示例：分形树递归
-void drawTree(float x, float y, float angle, int depth) {
-    if (depth == 0) return;
+// 碰撞检测
+void CheckCollision()
+{
+	for (size_t i = 0; i < balls.size(); i++)
+	{
+		for (size_t j = i + 1; j < balls.size(); j++)
+		{
+			Ball& a = balls[i];
+			Ball& b = balls[j];
 
-    float x2 = x + cos(angle) * depth * 10;
-    float y2 = y + sin(angle) * depth * 10;
+			if (!a.alive || !b.alive)
+				continue;
 
-    drawLine(x, y, x2, y2);
+			float dx = b.x - a.x;
+			float dy = b.y - a.y;
 
-    drawTree(x2, y2, angle - 0.3, depth - 1);
-    drawTree(x2, y2, angle + 0.3, depth - 1);
+			float dist2 = dx * dx + dy * dy;
+			float minDist = a.r + b.r;
+
+			if (dist2 >= minDist * minDist)
+				continue;
+
+			float dist = sqrt(dist2);
+
+			if (dist == 0)
+				dist = 0.01f;
+
+			// 法线
+			float nx = dx / dist;
+			float ny = dy / dist;
+
+			// 相对速度
+			float rvx = b.vx - a.vx;
+			float rvy = b.vy - a.vy;
+
+			float velAlongNormal = rvx * nx + rvy * ny;
+
+			// 如果正在远离，不处理
+			if (velAlongNormal > 0)
+				continue;
+
+			// 弹性碰撞（质量相同）
+			float impulse = -velAlongNormal;
+
+			a.vx -= impulse * nx;
+			a.vy -= impulse * ny;
+
+			b.vx += impulse * nx;
+			b.vy += impulse * ny;
+
+			// 位置修正（防止黏住）
+			float overlap = minDist - dist;
+
+			float correction = overlap * 0.5f;
+
+			a.x -= nx * correction;
+			a.y -= ny * correction;
+
+			b.x += nx * correction;
+			b.y += ny * correction;
+
+			CreateFirework((a.x + b.x) * 0.5f, (a.y + b.y) * 0.5f);
+		}
+	}
 }
+
+</code></pre>
+
+
+<pre><code>
+
+
 </code></pre>
 
     </section>
@@ -81,7 +141,7 @@ void drawTree(float x, float y, float angle, int depth) {
     <section>
         <h2>项目收获</h2>
         <p>
-            通过该项目，我深入理解了递归结构与图形生成的关系，
+            通过该项目，深入理解了递归结构与图形生成的关系，
             并提升了对复杂系统可视化的设计能力。
         </p>
     </section>
