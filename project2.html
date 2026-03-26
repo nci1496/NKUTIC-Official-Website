@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFC-Mini-Billiards</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">NKUTIC</div>
+    <nav>
+        <a href="index.html">返回首页</a>
+    </nav>
+</header>
+
+<main class="project-page">
+
+    <!-- 标题 -->
+    <section class="project-hero">
+        <h1>MFC-Mini-Billiards</h1>
+        <p>MFC桌球小型交互式台球模拟游戏</p>
+
+        <a class="btn"
+           href="https://github.com/nci1496/MFC-Mini-Billiards"
+           target="_blank"
+           rel="noopener noreferrer">
+           查看 GitHub
+        </a>
+    </section>
+
+    <!-- 项目截图 -->
+    <section>
+        <h2>效果展示</h2>
+        <img src="images/MFC-Mini-Billiards/demo.gif" class="project-img" title="MFC-Mini-Billiards">
+    </section>
+
+    <!-- 项目介绍 -->
+    <section>
+        <h2>项目介绍</h2>
+        <p>
+            MathChaosEngine 是一个用于展示分形与混沌系统的可视化项目，
+            当前实现了分形树生成，并支持参数控制与动态效果展示。
+        </p>
+    </section>
+
+    <!-- 技术点 -->
+    <section>
+        <h2>技术实现</h2>
+        <ul>
+            <li>C++ 图形绘制</li>
+            <li>递归生成分形结构</li>
+            <li>随机参数控制自然效果</li>
+        </ul>
+    </section>
+
+    <!-- 代码展示 -->
+    <section>
+        <h2>核心代码</h2>
+
+<pre><code>
+// 示例：分形树递归
+void drawTree(float x, float y, float angle, int depth) {
+    if (depth == 0) return;
+
+    float x2 = x + cos(angle) * depth * 10;
+    float y2 = y + sin(angle) * depth * 10;
+
+    drawLine(x, y, x2, y2);
+
+    drawTree(x2, y2, angle - 0.3, depth - 1);
+    drawTree(x2, y2, angle + 0.3, depth - 1);
+}
+</code></pre>
+
+    </section>
+
+    <!-- 收获 -->
+    <section>
+        <h2>项目收获</h2>
+        <p>
+            通过该项目，我深入理解了递归结构与图形生成的关系，
+            并提升了对复杂系统可视化的设计能力。
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 NKUTIC</p>
+</footer>
+
+</body>
+</html>
