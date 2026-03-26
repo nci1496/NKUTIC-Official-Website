@@ -2,19 +2,43 @@ const canvas = document.getElementById("heroCanvas");
 const ctx = canvas.getContext("2d");
 
 let particles = [];
-let texts = ["构建 · 探索 · 创造","NKUTIC", "犀牛鸟创新俱乐部"];
-//,+
+let texts = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
 let textIndex = 0;
 
-//保证尺寸正确
+// 模式：dot | code
+let mode = "code";
+
+// 字符池（用于代码粒子）
+const codeChars = [
+    "{", "}", "(", ")", ";", "+", "-", "*", "/", "=","if","as","do","in","or","//","#"
+];
+
+// =======================
+// 尺寸控制
+// =======================
 function resizeCanvas() {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 }
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
 
+// 字体大小（自适应）
+function getFontSize() {
+    return Math.max(40, Math.floor(canvas.width / 10));
+}
+
+// 粒子密度（自适应）
+function getGap() {
+    return canvas.width < 600 ? 10 : 6;
+}
+
+// 是否移动端
+function isMobile() {
+    return canvas.width < 600;
+}
+
+// =======================
 // 获取文字像素点
+// =======================
 function getTextPoints(text) {
     const offCanvas = document.createElement("canvas");
     const offCtx = offCanvas.getContext("2d");
@@ -22,8 +46,9 @@ function getTextPoints(text) {
     offCanvas.width = canvas.width;
     offCanvas.height = canvas.height;
 
+    offCtx.clearRect(0, 0, offCanvas.width, offCanvas.height);
     offCtx.fillStyle = "white";
-    offCtx.font = "bold 180px Arial";
+    offCtx.font = `bold ${getFontSize()}px Arial`;
     offCtx.textAlign = "center";
     offCtx.textBaseline = "middle";
 
@@ -33,8 +58,10 @@ function getTextPoints(text) {
 
     let points = [];
 
-    for (let y = 0; y < offCanvas.height; y += 6) {
-        for (let x = 0; x < offCanvas.width; x += 6) {
+    const gap = getGap();
+
+    for (let y = 0; y < offCanvas.height; y += gap) {
+        for (let x = 0; x < offCanvas.width; x += gap) {
             const i = (y * offCanvas.width + x) * 4;
             if (data[i + 3] > 128) {
                 points.push({ x, y });
@@ -42,11 +69,12 @@ function getTextPoints(text) {
         }
     }
 
-    console.log("points:", points.length);
     return points;
 }
 
+// =======================
 // 创建粒子
+// =======================
 function createParticles(text) {
     const points = getTextPoints(text);
 
@@ -55,12 +83,15 @@ function createParticles(text) {
         y: Math.random() * canvas.height,
         tx: p.x,
         ty: p.y,
-        vx: 0,
-        vy: 0
+        vx: (Math.random() - 0.5) * 20,
+        vy: (Math.random() - 0.5) * 20,
+        char: codeChars[Math.floor(Math.random() * codeChars.length)]
     }));
 }
 
+// =======================
 // 更新
+// =======================
 function update() {
     for (let p of particles) {
         let dx = p.tx - p.x;
@@ -77,28 +108,46 @@ function update() {
     }
 }
 
+// =======================
 // 绘制
+// =======================
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "#58a6ff";
 
-    for (let p of particles) {
-        ctx.fillRect(p.x, p.y, 2, 2);
+    if (mode === "dot") {
+        for (let p of particles) {
+            ctx.fillRect(p.x, p.y, 2, 2);
+        }
+    } else {
+        ctx.font = isMobile() ? "8px monospace" : "10px monospace";
+        ctx.globalAlpha = 0.9;
+
+        for (let p of particles) {
+            ctx.fillText(p.char, p.x, p.y);
+        }
+
+        ctx.globalAlpha = 1;
     }
 }
 
+// =======================
 // 动画循环
+// =======================
 function animate() {
     update();
     draw();
     requestAnimationFrame(animate);
 }
 
-// 点击爆散 + 切换
+// =======================
+// 点击：爆散 + 切换文字
+// =======================
 canvas.addEventListener("click", (e) => {
-    const cx = e.clientX;
-    const cy = e.clientY;
+    const rect = canvas.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
 
     // 💥 爆散
     for (let p of particles) {
@@ -112,6 +161,7 @@ canvas.addEventListener("click", (e) => {
         p.vy += dy * force;
     }
 
+    // 切换文字
     textIndex = (textIndex + 1) % texts.length;
 
     const newPoints = getTextPoints(texts[textIndex]);
@@ -119,28 +169,22 @@ canvas.addEventListener("click", (e) => {
     let newParticles = [];
 
     for (let i = 0; i < newPoints.length; i++) {
-        let base;
-
-        if (particles.length > 0) {
-            // 从已有粒子随机选一个“克隆源”
-            base = particles[Math.floor(Math.random() * particles.length)];
-        }
+        let base = particles[Math.floor(Math.random() * particles.length)];
 
         if (particles[i]) {
-            // 复用已有粒子
             let p = particles[i];
             p.tx = newPoints[i].x;
             p.ty = newPoints[i].y;
             newParticles.push(p);
         } else {
-            // 从已有粒子位置“分裂”
             newParticles.push({
                 x: base ? base.x : cx,
                 y: base ? base.y : cy,
                 tx: newPoints[i].x,
                 ty: newPoints[i].y,
                 vx: (Math.random() - 0.5) * 10,
-                vy: (Math.random() - 0.5) * 10
+                vy: (Math.random() - 0.5) * 10,
+                char: codeChars[Math.floor(Math.random() * codeChars.length)]
             });
         }
     }
@@ -148,22 +192,28 @@ canvas.addEventListener("click", (e) => {
     particles = newParticles;
 });
 
-setTimeout(() => {
-    particles = newParticles;
-}, 500);
+// =======================
+// 右键：切换模式（dot / code）
+// =======================
+canvas.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    mode = mode === "dot" ? "code" : "dot";
+});
 
+// =======================
+// Resize：重建粒子（关键修复）
+// =======================
+window.addEventListener("resize", () => {
+    resizeCanvas();
+    createParticles(texts[textIndex]);
+});
+
+// =======================
+// 初始化
+// =======================
 function init() {
-    const points = getTextPoints(texts[textIndex]);
-
-    particles = points.map(p => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        tx: p.x,
-        ty: p.y,
-        vx: (Math.random() - 0.5) * 20,
-        vy: (Math.random() - 0.5) * 20
-    }));
-
+    resizeCanvas();
+    createParticles(texts[textIndex]);
     animate();
 }
 
