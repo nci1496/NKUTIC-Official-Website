@@ -2,12 +2,8 @@ const canvas = document.getElementById("heroCanvas");
 const ctx = canvas.getContext("2d");
 
 let particles = [];
-let texts = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
+//let texts = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
 let textIndex = 0;
-
-document.getElementById("toggleMode").onclick = () => {
-    mode = mode === "dot" ? "code" : "dot";
-};
 
 const textsDesktop = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
 
@@ -44,7 +40,7 @@ function getTexts() {
 
 // 粒子密度（自适应）
 function getGap() {
-    return canvas.width < 600 ? 10 : 6;
+    return canvas.width < 600 ? 3 : 6;
 }
 
 // 是否移动端
@@ -182,7 +178,7 @@ canvas.addEventListener("click", (e) => {
         p.vx += dx * force;
         p.vy += dy * force;
     }
-
+    const texts = getTexts();
     // 切换文字
     textIndex = (textIndex + 1) % texts.length;
 
@@ -226,6 +222,7 @@ canvas.addEventListener("dblclick", () => {
 // =======================
 window.addEventListener("resize", () => {
     resizeCanvas();
+    const texts = getTexts();
     createParticles(texts[textIndex]);
 });
 
