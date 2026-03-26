@@ -1,0 +1,22 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Push to Gitee
+        run: |
+          git config --global user.name "nci1496"
+          git config --global user.email "254036467@qq.com"
+
+          git remote add gitee https://${{ secrets.GITEE_TOKEN }}@gitee.com/nci1496/nkutic.git
+          git push --force gitee master
