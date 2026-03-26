@@ -13,6 +13,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Debug Token
+        run: echo "TOKEN=${{ secrets.GITEE_TOKEN }}"
+
       - name: Push to Gitee
         run: |
           git config --global user.name "nci1496"
@@ -20,3 +23,4 @@ jobs:
 
           git remote add gitee https://oauth2:${{ secrets.GITEE_TOKEN }}@gitee.com/nci1496/nkutic.git
           git push --force gitee master
+
