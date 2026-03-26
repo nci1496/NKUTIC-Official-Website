@@ -31,7 +31,16 @@ function resizeCanvas() {
 
 // 字体大小（自适应）
 function getFontSize() {
+    if(isMobile()){
+
+    return Math.max(40, Math.floor(canvas.width / 6));
+
+    }else{
+
     return Math.max(40, Math.floor(canvas.width / 10));
+
+    }
+
 }
 
 function getTexts() {
