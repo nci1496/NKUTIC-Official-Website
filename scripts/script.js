@@ -5,8 +5,20 @@ let particles = [];
 let texts = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
 let textIndex = 0;
 
+document.getElementById("toggleMode").onclick = () => {
+    mode = mode === "dot" ? "code" : "dot";
+};
+
+const textsDesktop = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
+
+const textsMobile = [
+    "构建\n探索\n创造",
+    "NKU\nTIC",
+    "犀牛鸟\n创新俱乐部"
+];
+
 // 模式：dot | code
-let mode = "code";
+let mode = "dot";
 
 // 字符池（用于代码粒子）
 const codeChars = [
@@ -24,6 +36,10 @@ function resizeCanvas() {
 // 字体大小（自适应）
 function getFontSize() {
     return Math.max(40, Math.floor(canvas.width / 10));
+}
+
+function getTexts() {
+    return isMobile() ? textsMobile : textsDesktop;
 }
 
 // 粒子密度（自适应）
@@ -52,8 +68,14 @@ function getTextPoints(text) {
     offCtx.textAlign = "center";
     offCtx.textBaseline = "middle";
 
-    offCtx.fillText(text, offCanvas.width / 2, offCanvas.height / 2);
+    const lines = text.split("\n"); 
+    const lineHeight = getFontSize() * 1.2;
 
+    lines.forEach((line, i) => {
+    offCtx.fillText(
+        line,
+        offCanvas.width / 2,
+        offCanvas.height / 2 + (i - (lines.length - 1) / 2) * lineHeight);});
     const data = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height).data;
 
     let points = [];
@@ -121,7 +143,7 @@ function draw() {
             ctx.fillRect(p.x, p.y, 2, 2);
         }
     } else {
-        ctx.font = isMobile() ? "8px monospace" : "10px monospace";
+        ctx.font = isMobile() ? "4px monospace" : "10px monospace";
         ctx.globalAlpha = 0.9;
 
         for (let p of particles) {
@@ -193,10 +215,9 @@ canvas.addEventListener("click", (e) => {
 });
 
 // =======================
-// 右键：切换模式（dot / code）
+// 双击：切换模式（dot / code）
 // =======================
-canvas.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
+canvas.addEventListener("dblclick", () => {
     mode = mode === "dot" ? "code" : "dot";
 });
 
@@ -213,6 +234,7 @@ window.addEventListener("resize", () => {
 // =======================
 function init() {
     resizeCanvas();
+    const texts = getTexts();
     createParticles(texts[textIndex]);
     animate();
 }
