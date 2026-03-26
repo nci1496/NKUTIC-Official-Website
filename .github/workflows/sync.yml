@@ -18,5 +18,5 @@ jobs:
           git config --global user.name "nci1496"
           git config --global user.email "254036467@qq.com"
 
-          git remote add gitee https://${{ secrets.GITEE_TOKEN }}@gitee.com/nci1496/nkutic.git
+          git remote add gitee https://oauth2:${{ secrets.GITEE_TOKEN }}@gitee.com/nci1496/nkutic.git
           git push --force gitee master
