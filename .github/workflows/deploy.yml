@@ -28,5 +28,5 @@ jobs:
       - name: Upload to OSS
         run: |
           ./ossutil cp -r . oss://${{ secrets.OSS_BUCKET }} --update \
-          --exclude ".git/*" \
-          --exclude ".github/*"
+          --exclude ".git" \
+          --exclude ".github"
