@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Debug Token
         run: echo "TOKEN=${{ secrets.GITEE_TOKEN }}"
@@ -22,5 +24,6 @@ jobs:
           git config --global user.email "254036467@qq.com"
 
           git remote add gitee https://oauth2:${{ secrets.GITEE_TOKEN }}@gitee.com/nci1496/nkutic.git
-          git push --force gitee master
+          git push gitee --delete master || true
+          git push --force gitee HEAD:master
 
