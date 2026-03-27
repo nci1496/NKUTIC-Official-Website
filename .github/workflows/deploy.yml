@@ -1,0 +1,33 @@
+name: Deploy to OSS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup ossutil
+        run: |
+          curl -o ossutil https://gosspublic.alicdn.com/ossutil/1.7.16/ossutil64
+          chmod +x ossutil
+
+      - name: Configure ossutil
+        run: |
+          ./ossutil config -e ${{ secrets.OSS_ENDPOINT }} \
+          -i ${{ secrets.OSS_ACCESS_KEY_ID }} \
+          -k ${{ secrets.OSS_ACCESS_KEY_SECRET }} \
+          -L CH
+
+      - name: Upload to OSS
+        run: |
+          ./ossutil cp -r ./ oss://${{ secrets.OSS_BUCKET }} \
+          --exclude ".git/*" \
+          --exclude ".github/*" \
+          --update
