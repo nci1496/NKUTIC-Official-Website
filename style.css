@@ -44,7 +44,7 @@ nav a:hover {
 }
 
 #heroCanvas {
-        position: absolute;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -62,12 +62,18 @@ nav a:hover {
     color: white;
 
     z-index: 2;
+    
+    /* 防止阻挡被按 */
+    pointer-events: none;
+
 }
+
 
 /* 标题 */
 .hero-overlay h1 {
     font-size: 48px;
     margin-bottom: 10px;
+    
 }
 
 /* 副标题 */
@@ -85,7 +91,11 @@ nav a:hover {
     background: #58a6ff;
     color: white;
     cursor: pointer;
+/* 恢复按键功能 */
+    pointer-events: auto;
 }
+
+
 
 .hero::after {
     content: "";
@@ -139,7 +149,7 @@ section {
 
 .card a:hover {
     text-decoration: underline;
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: 0 10px 30px rgba(88,166,255,0.2);
 }
 
@@ -178,11 +188,13 @@ section {
     background: #1f6feb;
 }
 
-/* #projects {
+.card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-} */
+}
+
+
 
 /* 页脚 */
 footer {
@@ -211,6 +223,37 @@ footer {
     font-size: 40px;
     color: #58a6ff;
 }
+
+/* 更多按钮 */
+.more {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 999px; /* 胶囊按钮 */
+    background: linear-gradient(135deg, #58a6ff, #1f6feb);
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 1px;
+
+    transition: all 0.3s ease;
+}
+
+/* hover 提升 */
+.btn-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(88,166,255,0.4);
+}
+
+/* 点击反馈 */
+.btn-primary:active {
+    transform: scale(0.97);
+}
+
 
 /* 按钮 */
 .btn {

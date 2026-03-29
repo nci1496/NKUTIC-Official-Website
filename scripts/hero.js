@@ -1,3 +1,4 @@
+
 const canvas = document.getElementById("heroCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -12,6 +13,21 @@ const textsMobile = [
     "NKU\nTIC",
     "犀牛鸟\n创新俱乐部"
 ];
+
+const EasterEggTextsDesktop=["nci1496","NKUTIC","犀牛鸟创新俱乐部"];
+const EasterEggTextsMobile=[ 
+    "nci\n1496",
+    "NKU\nTIC",
+    "犀牛鸟\n创新俱乐部"];
+
+let isEasterEgg=false;
+let easterEggCount = 0;
+const easterEggTotal =4;//总切换次数
+
+function triggerEasterEgg() {
+    isEasterEgg = true;
+    easterEggCount = easterEggTotal; 
+}
 
 // 模式：dot | code
 let mode = "dot";
@@ -44,7 +60,13 @@ function getFontSize() {
 }
 
 function getTexts() {
-    return isMobile() ? textsMobile : textsDesktop;
+    const normal = isMobile() ? textsMobile : textsDesktop;
+    //彩蛋
+    if (isEasterEgg) {
+
+        return isMobile() ? EasterEggTextsMobile : EasterEggTextsDesktop;
+    }
+    return normal;
 }
 
 // 粒子密度（自适应）
@@ -140,11 +162,15 @@ function update() {
 // =======================
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#58a6ff";
-
+    ctx.globalAlpha = 1;
     if (mode === "dot") {
         for (let p of particles) {
+            if(isEasterEgg){
+            ctx.fillStyle = `hsl(${(Date.now() / 10 + p.x) % 360}, 80%, 60%)`;
+            }else{
+                ctx.fillStyle = "#58a6ff";
+            }
+
             ctx.fillRect(p.x, p.y, 2, 2);
         }
     } else {
@@ -152,6 +178,12 @@ function draw() {
         ctx.globalAlpha = 0.9;
 
         for (let p of particles) {
+            if(isEasterEgg){
+            ctx.fillStyle = `hsl(${(Date.now() / 10 + p.x) % 360}, 80%, 60%)`;
+            }else{
+                ctx.fillStyle = "#58a6ff";
+            }
+
             ctx.fillText(p.char, p.x, p.y);
         }
 
@@ -168,27 +200,19 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-// =======================
-// 点击：爆散 + 切换文字
-// =======================
-canvas.addEventListener("click", (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const cx = e.clientX - rect.left;
-    const cy = e.clientY - rect.top;
+let autoTimer=null;
 
-    // 💥 爆散
-    for (let p of particles) {
-        let dx = p.x - cx;
-        let dy = p.y - cy;
-        let dist = Math.sqrt(dx * dx + dy * dy) + 1;
+function startAutoSwitch() {
+    if (autoTimer) clearInterval(autoTimer); 
 
-        let force = 20 / dist;
+    autoTimer = setInterval(() => {
+        switchText();
+    }, 4000); // 4秒切换
+}
 
-        p.vx += dx * force;
-        p.vy += dy * force;
-    }
+function switchText() {
     const texts = getTexts();
-    // 切换文字
+
     textIndex = (textIndex + 1) % texts.length;
 
     const newPoints = getTextPoints(texts[textIndex]);
@@ -205,8 +229,8 @@ canvas.addEventListener("click", (e) => {
             newParticles.push(p);
         } else {
             newParticles.push({
-                x: base ? base.x : cx,
-                y: base ? base.y : cy,
+                x: base ? base.x : canvas.width / 2,
+                y: base ? base.y : canvas.height / 2,
                 tx: newPoints[i].x,
                 ty: newPoints[i].y,
                 vx: (Math.random() - 0.5) * 10,
@@ -217,6 +241,55 @@ canvas.addEventListener("click", (e) => {
     }
 
     particles = newParticles;
+
+        if (isEasterEgg) {
+        easterEggCount--;
+
+        if (easterEggCount <= 0) {
+            isEasterEgg = false;
+        }
+    }
+}
+
+// =======================
+// 点击：爆散 + 切换文字
+// =======================
+let clickCount = 0;//彩蛋计数
+
+canvas.addEventListener("click", (e) => {
+//点击中断自动
+    if (autoTimer) clearInterval(autoTimer);
+
+    clickCount++;
+
+    if (clickCount >= 5) {
+        triggerEasterEgg();
+        clickCount = 0;
+
+    }
+
+    const rect = canvas.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+
+    //  爆散
+    for (let p of particles) {
+        let dx = p.x - cx;
+        let dy = p.y - cy;
+        let dist = Math.sqrt(dx * dx + dy * dy) + 1;
+
+        let force = 20 / dist;
+
+        p.vx += dx * force;
+        p.vy += dy * force;
+    }
+    // 3. 立即切换（不要延迟）
+    switchText();
+
+    // 4. 重新开始自动轮播（延迟一点更自然）
+    setTimeout(() => {
+        startAutoSwitch();
+    }, 1000);
 });
 
 // =======================
@@ -241,8 +314,11 @@ window.addEventListener("resize", () => {
 function init() {
     resizeCanvas();
     const texts = getTexts();
+    //随机初始文字
+    textIndex = Math.floor(Math.random() * texts.length);
     createParticles(texts[textIndex]);
     animate();
+    startAutoSwitch();
 }
 
 init();
