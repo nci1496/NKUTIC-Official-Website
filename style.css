@@ -69,38 +69,20 @@ nav a:hover {
 }
 
 
-/* 标题 */
-/* .hero-overlay h1 {
-    font-size: 96px;
-    color: #58a6ff;
-    text-shadow: 0 0 20px rgba(88,166,255,0.4);
-    letter-spacing: 0.08em;
-    line-height: 1.1;
-    transform: scaleY(0.95); 
-}
-
-/* 副标题 */
-/* .hero-overlay p {
-    font-size: 36px;
-    color: #8b949e;
-    letter-spacing: 0.03em;
-    line-height: 1.2;
-
-}  */
 
 .hero-overlay h1 {
-    font-size: 120px;
+    font-size: clamp(42px, 9vw, 120px);
     color: #58a6ff;
     text-shadow: 0 0 20px rgba(88,166,255,0.4);
-    letter-spacing: 0.05em;
+    letter-spacing: clamp(1px, 0.5vw, 6px);
     line-height: 1.05;
     font-weight: 700;
 }
 
 .hero-overlay p {
-    font-size: 40px;
+    font-size: clamp(16px, 3.5vw, 40px);
     color: #8b949e;
-    letter-spacing: 0.03em;
+    letter-spacing: clamp(0.5px, 0.3vw, 3px);
     line-height: 1.2;
 }
 

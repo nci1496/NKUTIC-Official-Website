@@ -5,6 +5,10 @@ const ctx = canvas.getContext("2d");
 let particles = [];
 let textIndex = 0;
 
+////代码末尾有一段是专门为“鱼？”彩蛋写的，并且所有前面涉及到的我都加上 “ //鱼 ” 来区分了
+//鱼？
+let fishMode = false;
+
 const textsDesktop = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
 
 const textsMobile = [
@@ -22,10 +26,11 @@ const EasterEggTextsMobile=[
 let isEasterEgg=false;
 let easterEggCount = 0;//这只是用于彩蛋文本切换的计数
 let clickCount = 0;//彩蛋点击计数
+let clickFishCount =0;//鱼？模式点击计数
 
-let clickEasterEggCount =10;//需要点多少次才能进入彩蛋模式
+const clickEasterEggCount =10;//需要点多少次才能进入彩蛋模式
 
-const easterEggTotal =3;//总切换次数
+const easterEggTotal =3;//总切换次数 即彩蛋持续时间
 
 function triggerEasterEgg() {
     isEasterEgg = true;
@@ -166,6 +171,11 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.globalAlpha = 1;
+
+    //鱼？
+    if(fishMode)
+    {mode==="dot";}
+
     if (mode === "dot") {
         for (let p of particles) {
             if(isEasterEgg){
@@ -211,13 +221,23 @@ function startAutoSwitch() {
 
     autoTimer = setInterval(() => {
         
+        //鱼？
+        if (!fishMode && clickFishCount >= fishTriggerCount) {
+            enterFishText();
+            return; // 截断原逻辑，优先级最高
+        }
+        if(fishMode){
+            return; //进入”鱼？“模式了，不再执行自动切换
+        }
+
+
         if(isEasterEgg){
         easterEggCount--;}
         else{
         //如果没用进入彩蛋模式，但是自动切换了，就清空
         clickCount=0;
+        clickFishCount=0;
         }
-
 
         switchText();
         
@@ -271,12 +291,40 @@ canvas.addEventListener("click", (e) => {
     if (autoTimer) clearInterval(autoTimer);
 
     clickCount++;
+    clickFishCount++;
+
+    console.log(clickFishCount);
+    
+    // 鱼？
+    if (!fishMode && clickFishCount >= fishTriggerCount) {
+        enterFishText();
+        console.log("clickFishCount满足");
+        return; // 截断原逻辑，有限最高
+    }
+    if (fishMode && fishState === "text") {
+    fishTextClickCount++;
+    // 增强吸力，体现汇聚
+        for (let p of particles) {
+            let dx = canvas.width / 2 - p.x;
+            let dy = canvas.height / 2 - p.y;
+
+            p.vx += dx * 0.05;
+            p.vy += dy * 0.05;
+        }
+
+        if (fishTextClickCount >= fishCardCount) {
+            triggerFishExplosion();
+        }
+        return;
+    }
+
+    //end of 鱼？
 
     if (clickCount >= clickEasterEggCount) {
         triggerEasterEgg();
         clickCount = 0;
-
     }
+
 
     const rect = canvas.getBoundingClientRect();
     const cx = e.clientX - rect.left;
@@ -306,7 +354,12 @@ canvas.addEventListener("click", (e) => {
 // 双击：切换模式（dot / code）
 // =======================
 canvas.addEventListener("dblclick", () => {
-    mode = mode === "dot" ? "code" : "dot";
+    //鱼？ 在鱼模式下，不切
+    if(fishMode){
+        mode="dot";
+        return;
+    }
+mode = mode === "dot" ? "code" : "dot";
 });
 
 // =======================
@@ -332,3 +385,289 @@ function init() {
 }
 
 init();
+
+
+
+//////下面是专门为“鱼？”彩蛋写的，并且所有前面涉及到的我都加上 “ //鱼 ” 来区分了
+
+let fishState = "idle"; //用于 idle → text → collecting → explode → card 状态
+
+
+let fishTextClickCount = 0;
+
+let fishCanReRoll = false;//判断能不能继续变化
+
+const fishTriggerCount =20;//进入鱼？模式
+const fishCardCount =10;//进入鱼画面到渲染卡牌的点击次数
+
+function enableFishOverlay() {
+    document.getElementById("fishOverlay").classList.add("active");
+}
+
+function disableFishOverlay() {
+    document.getElementById("fishOverlay").classList.remove("active");
+}
+
+
+function enterFishText() {
+    fishMode = true;
+    fishState = "text";
+    fishTextClickCount = 0;
+    createParticles("鱼？");
+}
+
+function triggerFishExplosion() {
+    fishState = "explode";
+
+    // 爆炸
+    for (let p of particles) {
+        p.vx += (Math.random() - 0.5) * 50;
+        p.vy += (Math.random() - 0.5) * 50;
+    }
+
+    setTimeout(() => {
+        enterFishCard();
+    }, 500);
+}
+
+function enterFishCard() {
+    fishState = "card";
+
+    enableFishOverlay();
+    // 禁止canvas点击（防冲突）
+    canvas.style.pointerEvents = "none";
+
+    const result=randomFishResult();
+    fishCanReRoll=(result==="morefish");
+
+    showFishImage(result);
+     applyFishEffect(result)
+}
+
+function getFishImage(type) {
+    return `./images/fish/${type}.webp`; //goodfish,badfish,morefish,fishbot
+}
+
+function showFishImage(type) {
+    let layer = document.getElementById("fishLayer");
+
+    if (!layer) {
+        layer = document.createElement("div");
+        layer.id = "fishLayer";
+        document.body.appendChild(layer);
+    }
+
+    layer.innerHTML = "";
+
+    const img = document.createElement("img");
+    img.src = getFishImage(type);
+    img.className = "fish-card";
+
+    layer.appendChild(img);
+
+    fishTextClickCount = 0;
+
+    img.onclick = () => {
+    if (!fishCanReRoll) {
+        img.style.transform = "scale(0.95)";
+        setTimeout(() => {
+            img.style.transform = "scale(1)";
+            }, 120);
+            return;
+        }
+
+        
+    fishTextClickCount++;
+
+    // 收缩
+    img.style.transform = `scale(${1 - fishTextClickCount * 0.03})`;
+
+    if (fishTextClickCount >= fishCardCount) {
+        explodeFishImage(type);
+    }
+
+
+    };
+
+addFishTiltEffect(img);
+
+}
+
+
+
+function explodeFishImage(type) {
+    const img = document.querySelector(".fish-card");
+
+    img.style.transform = "scale(2)";
+    img.style.opacity = "0";
+
+    setTimeout(() => {
+        const result = randomFishResult();
+
+        if (result === "morefish") {
+            fishCanReRoll=true;
+            showFishImage("morefish");applyFishEffect("morefish");
+        } else {
+            fishCanReRoll = false; 
+            showFishImage(result);applyFishEffect(result);
+            lockFishImage();
+        }
+    }, 300);
+}
+
+function randomFishResult() {
+    const r = Math.random();
+
+    // if (r < 0.01) return "fishbot";
+    // if (r < 0.34) return "goodfish";
+    // if (r < 0.67) return "badfish";
+    if (r < 0.1) return "fishbot";
+    if (r < 0.4) return "goodfish";
+    if (r < 0.7) return "badfish";
+
+    return "morefish";
+}
+
+function lockFishImage() {
+    const img = document.querySelector(".fish-card");
+
+    img.onclick = () => {
+        img.style.transform = "scale(0.95)";
+        setTimeout(() => {
+            img.style.transform = "scale(1)";
+        }, 100);
+    };
+}
+
+function addFishTiltEffect(img) {
+    img.addEventListener("mousemove", e => {
+        const rect = img.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        img.style.transform = `
+            perspective(800px)
+            rotateY(${x * 12}deg)
+            rotateX(${-y * 12}deg)
+            scale(1.05)
+        `;
+    });
+
+    img.addEventListener("mouseleave", () => {
+        img.style.transform = "";
+    });
+}
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener("mousemove", e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+function spawnParticles(color) {
+    // const layer = document.getElementById("fishLayer");
+    // const card = document.querySelector(".fish-card");
+
+    // if (!layer || !card) return;
+
+    // const rect = card.getBoundingClientRect();
+    // const cx = rect.left + rect.width / 2;
+    // const cy = rect.top + rect.height / 2;
+
+    // for (let i = 0; i < 12; i++) {
+    //     const p = document.createElement("div");
+    //     p.className = "fish-particle";
+
+    //     //  从中心生成（在卡片下面）
+    //     p.style.left = cx + "px";
+    //     p.style.top = cy + "px";
+
+    //     // 当前粒子位置（初始就是中心）
+    //     const px = cx;
+    //     const py = cy;
+
+    //     //  计算方向（远离卡片 + 鼠标）
+    //     let dx = (px - cx) + (px - mouseX) * 0.6;
+    //     let dy = (py - cy) + (py - mouseY) * 0.6;
+
+    //     //  防止方向为0
+    //     if (dx === 0 && dy === 0) {
+    //         dx = (Math.random() - 0.5) * 100;
+    //         dy = (Math.random() - 0.5) * 100;
+    //     }
+
+    //     //  归一化（让速度统一）
+    //     const len = Math.sqrt(dx * dx + dy * dy);
+    //     dx = (dx / len) * (80 + Math.random() * 40);
+    //     dy = (dy / len) * (80 + Math.random() * 40);
+
+    //     p.style.setProperty("--dx", `${dx}px`);
+    //     p.style.setProperty("--dy", `${dy}px`);
+
+    //     p.style.background = color;
+
+    //     layer.appendChild(p);
+
+    //     setTimeout(() => p.remove(), 2000);
+    // }
+}
+
+let particleTimer;
+
+function startParticleFlow(color) {
+    clearInterval(particleTimer);
+
+    particleTimer = setInterval(() => {
+        spawnParticles(color);
+    }, 600); // 持续生成
+}
+
+function stopParticleFlow() {
+    clearInterval(particleTimer);
+}
+
+
+
+function applyFishEffect(type) {
+    console.log("1");
+    const img = document.querySelector(".fish-card");
+
+    if (!img) return;
+
+    // 先清掉旧效果（避免叠加）
+    img.style.filter = "";
+    img.style.boxShadow = "";
+
+    switch (type) {
+
+        case "goodfish":
+            //  彩色粒子
+            startParticleFlow(`hsl(${Math.random()*360},80%,60%)`);
+            img.style.filter = "drop-shadow(0 0 30px gold)";
+
+            break;
+
+        case "badfish":
+            //  黑色粒子
+            startParticleFlow("rgba(0,0,0,0.8)");
+
+            img.style.filter = "brightness(0.6)";
+            break;
+
+        case "morefish":
+            //  白色提示
+            img.style.filter = "brightness(1.2) drop-shadow(0 0 20px rgba(255,255,255,0.6))";
+            break;
+
+        case "fishbot":
+            //  白色粒子（干净+神秘）
+            spawnParticles("white");
+
+            img.style.filter = "contrast(1.2)";
+            break;
+    }
+    console.log("2");
+    console.log(type);
+
+}
