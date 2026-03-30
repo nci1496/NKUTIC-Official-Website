@@ -8,7 +8,7 @@ let particles = [];
 // =======================
 const CONFIG = {
     particleCount: 140,
-    color: "rgba(88,166,255,0.65)",
+    color: "rgba(88, 149, 255, 0.69)",
     hoverRadius: 120,
     force: 0.06,
 };

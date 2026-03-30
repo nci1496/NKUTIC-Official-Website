@@ -20,15 +20,19 @@ const EasterEggTextsMobile=[
     "犀牛鸟\n创新俱乐部"];
 
 let isEasterEgg=false;
-let easterEggCount = 0;
-const easterEggTotal =4;//总切换次数
+let easterEggCount = 0;//这只是用于彩蛋文本切换的计数
+let clickCount = 0;//彩蛋点击计数
+
+let clickEasterEggCount =10;//需要点多少次才能进入彩蛋模式
+
+const easterEggTotal =3;//总切换次数
 
 function triggerEasterEgg() {
     isEasterEgg = true;
     easterEggCount = easterEggTotal; 
 }
 
-// 模式：dot | code
+// 初始模式：dot | code
 let mode = "code";
 
 // 字符池（用于代码粒子）
@@ -206,7 +210,17 @@ function startAutoSwitch() {
     if (autoTimer) clearInterval(autoTimer); 
 
     autoTimer = setInterval(() => {
+        
+        if(isEasterEgg){
+        easterEggCount--;}
+        else{
+        //如果没用进入彩蛋模式，但是自动切换了，就清空
+        clickCount=0;
+        }
+
+
         switchText();
+        
     }, 4000); // 4秒切换
 }
 
@@ -243,8 +257,6 @@ function switchText() {
     particles = newParticles;
 
         if (isEasterEgg) {
-        easterEggCount--;
-
         if (easterEggCount <= 0) {
             isEasterEgg = false;
         }
@@ -254,15 +266,13 @@ function switchText() {
 // =======================
 // 点击：爆散 + 切换文字
 // =======================
-let clickCount = 0;//彩蛋计数
-
 canvas.addEventListener("click", (e) => {
 //点击中断自动
     if (autoTimer) clearInterval(autoTimer);
 
     clickCount++;
 
-    if (clickCount >= 5) {
+    if (clickCount >= clickEasterEggCount) {
         triggerEasterEgg();
         clickCount = 0;
 

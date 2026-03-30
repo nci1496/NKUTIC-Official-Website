@@ -23,7 +23,7 @@ function createCard(p) {
             ${p.tags.map(t => `<span class="tag">${t}</span>`).join("")}
         </div>
 
-        <a href="${p.github}" target="_blank">GitHub</a>
+    <a href="${p.github}" target="_blank" rel="noopener">GitHub</a>
     `;
 
         div.addEventListener("mousemove", e => {
