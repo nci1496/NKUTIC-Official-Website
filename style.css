@@ -72,8 +72,9 @@ nav a:hover {
 /* 标题 */
 .hero-overlay h1 {
     font-size: 48px;
-    margin-bottom: 10px;
-    
+    color: #58a6ff;
+    text-shadow: 0 0 20px rgba(88,166,255,0.4);
+    letter-spacing: 3px;
 }
 
 /* 副标题 */

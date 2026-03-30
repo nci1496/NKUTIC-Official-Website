@@ -3,7 +3,6 @@ const canvas = document.getElementById("heroCanvas");
 const ctx = canvas.getContext("2d");
 
 let particles = [];
-//let texts = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
 let textIndex = 0;
 
 const textsDesktop = ["构建 · 探索 · 创造", "NKUTIC", "犀牛鸟创新俱乐部"];
@@ -30,7 +29,7 @@ function triggerEasterEgg() {
 }
 
 // 模式：dot | code
-let mode = "dot";
+let mode = "code";
 
 // 字符池（用于代码粒子）
 const codeChars = [
@@ -49,11 +48,11 @@ function resizeCanvas() {
 function getFontSize() {
     if(isMobile()){
 
-    return Math.max(40, Math.floor(canvas.width / 6));
+    return Math.max(40, Math.floor(canvas.width / 5.5));
 
     }else{
 
-    return Math.max(40, Math.floor(canvas.width / 10));
+    return Math.max(40, Math.floor(canvas.width / 9));
 
     }
 
@@ -71,7 +70,7 @@ function getTexts() {
 
 // 粒子密度（自适应）
 function getGap() {
-    return canvas.width < 600 ? 3 : 6;
+    return isMobile()? 5 : 6;
 }
 
 // 是否移动端
@@ -174,7 +173,8 @@ function draw() {
             ctx.fillRect(p.x, p.y, 2, 2);
         }
     } else {
-        ctx.font = isMobile() ? "4px monospace" : "10px monospace";
+        // 字符大小
+        ctx.font = isMobile() ? "10px monospace" : "10px monospace";
         ctx.globalAlpha = 0.9;
 
         for (let p of particles) {
