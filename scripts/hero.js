@@ -395,8 +395,8 @@ let fishTextClickCount = 0;
 
 let fishCanReRoll = false;//判断能不能继续变化
 
-const fishTriggerCount =5;//进入鱼？模式
-const fishCardCount =5;//进入鱼画面到渲染卡牌的点击次数
+const fishTriggerCount =30;//进入鱼？模式
+const fishCardCount =10;//进入鱼画面到渲染卡牌的点击次数
 
 //全局变量
 let moveX = 0;
@@ -550,62 +550,79 @@ function lockFishImage() {
 
 function addFishFollowEffect(img) {
     let rect = null;
-    press=1;
+    let isDragging = false;
+
+    let offsetX = 0;
+    let offsetY = 0;
 
     img.addEventListener("mouseenter", () => {
         rect = img.getBoundingClientRect();
-        img.style.transition = "transform 0.1s ease-out";
     });
 
     img.addEventListener("mousemove", e => {
-
-        if (!rect) return;
+        if (!rect || isDragging) return; // ❗拖拽时禁用hover
 
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
 
-        // 🔥 偏移（核心：轻微就够）
-        moveX = (x - centerX) / 10;
-        moveY = (y - centerY) / 10;
+        moveX = (x - cx) / 6;
+        moveY = (y - cy) / 6;
 
-        // 🔥 倾斜（比你之前更克制）
-        rotateY = (x - centerX) / 15;
-        rotateX = -(y - centerY) / 15;
+        rotateY = (x - cx) / 10;
+        rotateX = -(y - cy) / 10;
 
-        img.style.transform = `
-            perspective(800px)
-            translate(${moveX}px, ${moveY}px)
-            rotateX(${rotateX}deg)
-            rotateY(${rotateY}deg)
-            scale(${1.05 * press})
-        `;
+        updateTransform(img);
     });
 
-    img.addEventListener("mouseleave", () => {
-        // 🔥 回弹（关键手感）
-        img.style.transition = "transform 0.3s cubic-bezier(0.2, 0.8, 0.4, 1)";
-        img.style.transform = `
-            perspective(800px)
-            translate(0, 0)
-            rotateX(0)
-            rotateY(0)
-            scale(1)
-        `;
+    // ====================
+    // 🔥 拖拽开始
+    // ====================
+    img.addEventListener("mousedown", e => {
+        isDragging = true;
+
+        const rect = img.getBoundingClientRect();
+
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        img.style.transition = "none"; // ❗拖动时不要过渡
     });
 
-    img.addEventListener("mousedown", () => {
-        press = 0.97;
+    // ====================
+    // 🔥 拖拽中（监听全局）
+    // ====================
+    document.addEventListener("mousemove", e => {
+        if (!isDragging) return;
+
+        moveX = e.clientX - offsetX - window.innerWidth / 2 + rect.width / 2;
+        moveY = e.clientY - offsetY - window.innerHeight / 2 + rect.height / 2;
+
+        rotateX = 0;
+        rotateY = 0;
+
+        updateTransform(img);
     });
 
-    img.addEventListener("mouseup", () => {
-        press = 1;
+    // ====================
+    // 🔥 松开 → 回弹
+    // ====================
+    document.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+
+        isDragging = false;
+
+        moveX = 0;
+        moveY = 0;
+        rotateX = 0;
+        rotateY = 0;
+
+        img.style.transition = "transform 0.4s cubic-bezier(0.2,0.8,0.4,1)";
+
+        updateTransform(img);
     });
-
-
-
 }
 
 function applyFishEffect(type) {
