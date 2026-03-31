@@ -38,7 +38,7 @@ function triggerEasterEgg() {
 }
 
 // 初始模式：dot | code
-let mode = "code";
+let mode = "dot";
 
 // 字符池（用于代码粒子）
 const codeChars = [
@@ -292,8 +292,6 @@ canvas.addEventListener("click", (e) => {
 
     clickCount++;
     clickFishCount++;
-
-    console.log(clickFishCount);
     
     // 鱼？
     if (!fishMode && clickFishCount >= fishTriggerCount) {
@@ -397,8 +395,17 @@ let fishTextClickCount = 0;
 
 let fishCanReRoll = false;//判断能不能继续变化
 
-const fishTriggerCount =20;//进入鱼？模式
-const fishCardCount =10;//进入鱼画面到渲染卡牌的点击次数
+const fishTriggerCount =5;//进入鱼？模式
+const fishCardCount =5;//进入鱼画面到渲染卡牌的点击次数
+
+//全局变量
+let moveX = 0;
+let moveY = 0;
+let rotateX = 0;
+let rotateY = 0;
+let scale = 1;
+let press = 1;
+
 
 function enableFishOverlay() {
     document.getElementById("fishOverlay").classList.add("active");
@@ -462,26 +469,20 @@ function showFishImage(type) {
     const img = document.createElement("img");
     img.src = getFishImage(type);
     img.className = "fish-card";
+    img.draggable="false"
 
-    layer.appendChild(img);
+    const wrapper = document.createElement("div");
+    wrapper.className = "fish-wrapper";
+
+    wrapper.appendChild(img);
+    layer.appendChild(wrapper);
 
     fishTextClickCount = 0;
 
     img.onclick = () => {
-    if (!fishCanReRoll) {
-        img.style.transform = "scale(0.95)";
-        setTimeout(() => {
-            img.style.transform = "scale(1)";
-            }, 120);
-            return;
-        }
-
-        
     fishTextClickCount++;
-
-    // 收缩
-    img.style.transform = `scale(${1 - fishTextClickCount * 0.03})`;
-
+    scale = 1 - fishTextClickCount * 0.03;
+    updateTransform(img);
     if (fishTextClickCount >= fishCardCount) {
         explodeFishImage(type);
     }
@@ -489,11 +490,19 @@ function showFishImage(type) {
 
     };
 
-addFishTiltEffect(img);
+addFishFollowEffect(img);
 
 }
 
-
+function updateTransform(img) {
+    img.style.transform = `
+        perspective(800px)
+        translate(${moveX}px, ${moveY}px)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+        scale(${scale * press})
+    `;
+}
 
 function explodeFishImage(type) {
     const img = document.querySelector(".fish-card");
@@ -539,98 +548,68 @@ function lockFishImage() {
     };
 }
 
-function addFishTiltEffect(img) {
+function addFishFollowEffect(img) {
+    let rect = null;
+    press=1;
+
+    img.addEventListener("mouseenter", () => {
+        rect = img.getBoundingClientRect();
+        img.style.transition = "transform 0.1s ease-out";
+    });
+
     img.addEventListener("mousemove", e => {
-        const rect = img.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        if (!rect) return;
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        // 🔥 偏移（核心：轻微就够）
+        moveX = (x - centerX) / 10;
+        moveY = (y - centerY) / 10;
+
+        // 🔥 倾斜（比你之前更克制）
+        rotateY = (x - centerX) / 15;
+        rotateX = -(y - centerY) / 15;
 
         img.style.transform = `
             perspective(800px)
-            rotateY(${x * 12}deg)
-            rotateX(${-y * 12}deg)
-            scale(1.05)
+            translate(${moveX}px, ${moveY}px)
+            rotateX(${rotateX}deg)
+            rotateY(${rotateY}deg)
+            scale(${1.05 * press})
         `;
     });
 
     img.addEventListener("mouseleave", () => {
-        img.style.transform = "";
+        // 🔥 回弹（关键手感）
+        img.style.transition = "transform 0.3s cubic-bezier(0.2, 0.8, 0.4, 1)";
+        img.style.transform = `
+            perspective(800px)
+            translate(0, 0)
+            rotateX(0)
+            rotateY(0)
+            scale(1)
+        `;
     });
+
+    img.addEventListener("mousedown", () => {
+        press = 0.97;
+    });
+
+    img.addEventListener("mouseup", () => {
+        press = 1;
+    });
+
+
+
 }
-let mouseX = 0;
-let mouseY = 0;
-
-document.addEventListener("mousemove", e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
-
-function spawnParticles(color) {
-    // const layer = document.getElementById("fishLayer");
-    // const card = document.querySelector(".fish-card");
-
-    // if (!layer || !card) return;
-
-    // const rect = card.getBoundingClientRect();
-    // const cx = rect.left + rect.width / 2;
-    // const cy = rect.top + rect.height / 2;
-
-    // for (let i = 0; i < 12; i++) {
-    //     const p = document.createElement("div");
-    //     p.className = "fish-particle";
-
-    //     //  从中心生成（在卡片下面）
-    //     p.style.left = cx + "px";
-    //     p.style.top = cy + "px";
-
-    //     // 当前粒子位置（初始就是中心）
-    //     const px = cx;
-    //     const py = cy;
-
-    //     //  计算方向（远离卡片 + 鼠标）
-    //     let dx = (px - cx) + (px - mouseX) * 0.6;
-    //     let dy = (py - cy) + (py - mouseY) * 0.6;
-
-    //     //  防止方向为0
-    //     if (dx === 0 && dy === 0) {
-    //         dx = (Math.random() - 0.5) * 100;
-    //         dy = (Math.random() - 0.5) * 100;
-    //     }
-
-    //     //  归一化（让速度统一）
-    //     const len = Math.sqrt(dx * dx + dy * dy);
-    //     dx = (dx / len) * (80 + Math.random() * 40);
-    //     dy = (dy / len) * (80 + Math.random() * 40);
-
-    //     p.style.setProperty("--dx", `${dx}px`);
-    //     p.style.setProperty("--dy", `${dy}px`);
-
-    //     p.style.background = color;
-
-    //     layer.appendChild(p);
-
-    //     setTimeout(() => p.remove(), 2000);
-    // }
-}
-
-let particleTimer;
-
-function startParticleFlow(color) {
-    clearInterval(particleTimer);
-
-    particleTimer = setInterval(() => {
-        spawnParticles(color);
-    }, 600); // 持续生成
-}
-
-function stopParticleFlow() {
-    clearInterval(particleTimer);
-}
-
-
 
 function applyFishEffect(type) {
-    console.log("1");
+
     const img = document.querySelector(".fish-card");
 
     if (!img) return;
@@ -642,32 +621,23 @@ function applyFishEffect(type) {
     switch (type) {
 
         case "goodfish":
-            //  彩色粒子
-            startParticleFlow(`hsl(${Math.random()*360},80%,60%)`);
+            //金色
             img.style.filter = "drop-shadow(0 0 30px gold)";
 
             break;
 
         case "badfish":
-            //  黑色粒子
-            startParticleFlow("rgba(0,0,0,0.8)");
-
+            //黑色
             img.style.filter = "brightness(0.6)";
             break;
 
         case "morefish":
-            //  白色提示
+            // 白色
             img.style.filter = "brightness(1.2) drop-shadow(0 0 20px rgba(255,255,255,0.6))";
             break;
 
         case "fishbot":
-            //  白色粒子（干净+神秘）
-            spawnParticles("white");
-
             img.style.filter = "contrast(1.2)";
             break;
     }
-    console.log("2");
-    console.log(type);
-
 }
