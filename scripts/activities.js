@@ -2,11 +2,25 @@
 // 约定：date 使用 ISO 字符串（YYYY-MM-DD 或带时区的完整 ISO），用于排序
 export const activities = [
   {
+    id: "SchoolOpenDay",
+    title: "2026梨园春荟",
+    date: "2026-04-04",
+    location: "津南梨园",
+    cover: "images/activities/2026梨园春荟.png",
+    desc: "每年一度梨园春荟是一场展示社团成果、分享社团故事、增进社团凝聚力的盛会。我们准备了小活动以及丰富的小奖品，欢迎大家参加",
+    type: "纳新",
+    tags: ["纳新", "分享"],
+    featured: false,
+    links: [
+      { label: "详细链接", href: "https://mp.weixin.qq.com/s/kGVkueHFc6qcxhWV1V34-A" }
+    ]
+  },
+  {
     id: "weekly-meetup-2026-04",
     title: "技术例会：C++ & EasyX 简单项目开发",
     date: "2026-04-5",
     location: "线下 · 大通活动中心",
-    cover: "images/activities/2026技术例会.gif",
+    cover: "images/activities/20260405技术例会.gif",
     desc: "本周例会我们会通过从零开始发现项目，给新人快速介绍项目开发思路（C++、EasyX、面向对象开发）。",
     type: "例会",
     tags: ["例会", "C++", "EasyX"],
@@ -29,19 +43,6 @@ export const activities = [
       { label: "报名链接", href: "https://algo.qq.com/?type=register&sessionid=" }
     ]
   },
-  {
-    id: "SchoolOpenDay",
-    title: "2026梨园春荟",
-    date: "2026-04-04",
-    location: "津南梨园",
-    cover: "images/activities/2026梨园春荟.png",
-    desc: "每年一度梨园春荟是一场展示社团成果、分享社团故事、增进社团凝聚力的盛会。我们准备了小活动以及丰富的小奖品，欢迎大家参加",
-    type: "纳新",
-    tags: ["纳新", "分享"],
-    featured: false,
-    links: [
-      { label: "详细链接", href: "https://mp.weixin.qq.com/s/kGVkueHFc6qcxhWV1V34-A" }
-    ]
-  }
+
 ];
 
