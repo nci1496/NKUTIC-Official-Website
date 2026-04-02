@@ -2,42 +2,45 @@
 // 约定：date 使用 ISO 字符串（YYYY-MM-DD 或带时区的完整 ISO），用于排序
 export const activities = [
   {
-    id: "weekly-meetup-2026-03",
-    title: "技术例会：项目进展 & 新人 Onboarding",
-    date: "2026-03-20",
-    location: "线上 · 腾讯会议",
-    desc: "本周例会我们会过一遍在做的项目、下周任务拆分，并给新人快速介绍社团协作方式（Git/GitHub、项目卡片、资料沉淀）。",
+    id: "weekly-meetup-2026-04",
+    title: "技术例会：C++ & EasyX 简单项目开发",
+    date: "2026-04-5",
+    location: "线下 · 大通活动中心",
+    cover: "images/activities/2026技术例会.gif",
+    desc: "本周例会我们会通过从零开始发现项目，给新人快速介绍项目开发思路（C++、EasyX、面向对象开发）。",
     type: "例会",
-    tags: ["例会", "协作", "Git"],
+    tags: ["例会", "C++", "EasyX"],
     featured: true,
     links: [
-      { label: "会议纪要", href: "#" }
+      { label: "", href: "#" }
     ]
   },
   {
     id: "icpc-teamup-2026-spring",
-    title: "比赛组队：ICPC/CCPC 春季热身",
+    title: "比赛分享：2026腾讯广告算法大赛",
     date: "2026-03-28",
-    location: "线下 · 学院自习室",
-    desc: "面向想打算法竞赛的同学，现场匹配队友、分方向刷题、约定训练节奏；也欢迎纯围观了解竞赛体系。",
+    cover: "images/activities/2026腾讯广告算法大赛.png",
+    location: "线上",
+    desc: "本次大赛不仅能斩获高额奖金，获奖团队更有机会登上KDD国际学术舞台，Top 队伍选手有机会加入腾讯。<br>即使你的AUC不是最高的，只要方法有足够的新意和学术价值，同样有机会拿到重量级奖项。<br>报名时间：3月19日-4月23日（AOE时间），初赛、复赛依次于4-6月开展，8月9-13日KDD Workshop现场颁奖",
     type: "比赛",
     tags: ["比赛组队", "算法", "训练"],
     featured: true,
     links: [
-      { label: "报名", href: "#" }
+      { label: "报名链接", href: "https://algo.qq.com/?type=register&sessionid=" }
     ]
   },
   {
-    id: "project-sharing-mlops-101",
-    title: "项目分享：从 0 到 1 做一个可复现的 AI 小实验",
-    date: "2026-02-26",
-    location: "线上",
-    desc: "围绕一个小模型/小数据集，讲清楚如何做实验记录、参数管理、结果复现与分享，让项目不止停留在“跑通”。",
-    type: "分享",
-    tags: ["AI", "复现", "实践"],
+    id: "SchoolOpenDay",
+    title: "2026梨园春荟",
+    date: "2026-04-04",
+    location: "津南梨园",
+    cover: "images/activities/2026梨园春荟.png",
+    desc: "每年一度梨园春荟是一场展示社团成果、分享社团故事、增进社团凝聚力的盛会。我们准备了小活动以及丰富的小奖品，欢迎大家参加",
+    type: "纳新",
+    tags: ["纳新", "分享"],
     featured: false,
     links: [
-      { label: "Slides", href: "#" }
+      { label: "详细链接", href: "https://mp.weixin.qq.com/s/kGVkueHFc6qcxhWV1V34-A" }
     ]
   }
 ];
