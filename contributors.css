@@ -52,13 +52,26 @@
     z-index: 1;
 }
 
+
 /* 网格 */
 
 .member-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
     margin: 30px 0;
+}
+
+@media (max-width: 900px) {
+    .member-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .member-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* 标签 */
@@ -79,16 +92,11 @@
     width: 100%;
     background: #161b22;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 16px;
     text-align: center;
     transition: 0.3s;
     position: relative;
     pointer-events: auto;
-}
-.member-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 50px;
 }
 
 .member img {
@@ -107,11 +115,18 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 10px;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 8px;
+
     color: #58a6ff;
     border: 1px solid #58a6ff;
-    padding: 2px 6px;
-    border-radius: 6px;
+
+    background: rgba(88,166,255,0.1);
+    backdrop-filter: blur(4px);
+
+    transition: 0.2s;
+    z-index: 2; 
 }
 
 /* 高光 */
@@ -120,29 +135,9 @@
     position: relative;
     border: 1px solid transparent;
     background: #161b22;
+    z-index: 1;
 }
 
-/* .member.highlight::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: 12px;
-    background: linear-gradient(120deg, #58a6ff, transparent, #58a6ff);
-    z-index: -1;
-    filter: blur(8px);
-} */
-
-.member.highlight::after {
-    content: "CORE";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 10px;
-    color: #58a6ff;
-    border: 1px solid #58a6ff;
-    padding: 2px 6px;
-    border-radius: 6px;
-}
 
 .member::after {
     content: "";
@@ -154,22 +149,16 @@
         rgba(88,166,255,0.2),
         transparent 60%
     );
+        border: 1px solid #58a6ff;
     opacity: 0;
     transition: 0.2s;
+
+    pointer-events: none; /* ⭐ 必须 */
 }
 
 .member:hover::after {
     opacity: 1;
 }
-
-
-
-/* 流光背景,加!important防止被覆盖 */
-/* body {
-    background: radial-gradient(circle at 20% 30%, #0a1a2f, transparent),
-                radial-gradient(circle at 80% 70%, #0a1a2f, transparent),
-                #0d1117 !important;  
-            } */
 
 /* 背景扫描线 */
 
@@ -184,4 +173,78 @@ body::after {
     )!important;
     pointer-events: none;
     z-index: 999;
+}
+
+
+/* 成员介绍 */
+
+.dept {
+    margin-top: 80px;
+}
+
+/* 标题风格 */
+.dept h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* 技术部 */
+.dept-tech h2 {
+    color: #58a6ff;
+}
+.dept-tech h2::after {
+    background: #58a6ff;
+}
+
+/* 宣传部 */
+.dept-media h2 {
+    color: #ff7b72;
+}
+.dept-media h2::after {
+    background: #ff7b72;
+}
+
+/* 运营部 */
+.dept-ops h2 {
+    color: #3fb950;
+}
+.dept-ops h2::after {
+    background: #3fb950;
+}
+
+.dept h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 50px;
+    height: 3px;
+}
+
+/* 技术部：蓝 */
+.member.dept-tech {
+    border-top: 3px solid #58a6ff;
+}
+
+/* 宣传部：红 */
+.member.dept-media {
+    border-top: 3px solid #ff7b72;
+}
+
+/* 运营部：绿 */
+.member.dept-ops {
+    border-top: 3px solid #3fb950;
+}
+
+.member.dept-tech:hover {
+    box-shadow: 0 10px 30px rgba(88,166,255,0.25);
+}
+
+.member.dept-media:hover {
+    box-shadow: 0 10px 30px rgba(255,123,114,0.25);
+}
+
+.member.dept-ops:hover {
+    box-shadow: 0 10px 30px rgba(63,185,80,0.25);
 }

@@ -582,7 +582,7 @@ function addFishFollowEffect(img) {
     // ====================
     img.addEventListener("mousedown", e => {
         isDragging = true;
-
+        press=1.05
         const rect = img.getBoundingClientRect();
 
         offsetX = e.clientX - rect.left;
@@ -590,6 +590,8 @@ function addFishFollowEffect(img) {
 
         img.style.transition = "none"; // ❗拖动时不要过渡
     });
+
+
 
     // ====================
     // 🔥 拖拽中（监听全局）

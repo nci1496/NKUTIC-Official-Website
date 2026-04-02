@@ -7,24 +7,32 @@ function createCard(p) {
     const div = document.createElement("div");
     div.className = "member";
 
-    if (p.core) div.classList.add("highlight");
-    if (p.badge) {
-    const badge = document.createElement("div");
-    badge.className = "badge";
-    badge.innerText = p.badge;
-    div.appendChild(badge);
-    }
+    div.classList.add(`dept-${p.department}`);
+
+    
     div.innerHTML = `
         <img src="${p.avatar}">
         <h3>${p.name}</h3>
-        <p>${p.role}</p>
+        <p>${p.signature}</p>
 
         <div class="tags">
             ${p.tags.map(t => `<span class="tag">${t}</span>`).join("")}
         </div>
 
-    <a href="${p.github}" target="_blank" rel="noopener">GitHub</a>
+    ${p.github && p.github !== "#" 
+        ? `<a href="${p.github}" target="_blank" rel="noopener">GitHub</a>` 
+        : ""}
     `;
+
+    if (p.core) div.classList.add("highlight");
+    if (p.badge || p.core) {
+    const badge = document.createElement("div");
+    badge.className = "badge";
+
+    badge.innerText = p.badge|| "";
+
+    div.appendChild(badge);
+}
 
         div.addEventListener("mousemove", e => {
         const rect = div.getBoundingClientRect();
@@ -42,6 +50,8 @@ function createCard(p) {
         div.style.setProperty("--y", `${y * 100 + 50}%`);
     });
 
+
+
     return div;
 }
 
@@ -57,12 +67,31 @@ document.querySelectorAll(".member").forEach(card => {
     });
 });
 
-// 渲染核心
-contributors.filter(p => p.core).forEach(p => {
-    coreContainer.appendChild(createCard(p));
-});
+// // 渲染核心
+// contributors.filter(p => p.core).forEach(p => {
+//     coreContainer.appendChild(createCard(p));
+// });
 
-// 渲染全部
+// // 渲染全部
+// contributors.forEach(p => {
+//     allContainer.appendChild(createCard(p));
+// });
+
+
+const containers = {
+    tech: document.getElementById("tech-members"),
+    media: document.getElementById("media-members"),
+    ops: document.getElementById("ops-members")
+};
+
 contributors.forEach(p => {
-    allContainer.appendChild(createCard(p));
+    const card = createCard(p);
+
+    const container = containers[p.department];
+
+    if (container) {
+        container.appendChild(card);
+    } else {
+        console.warn("未知部门:", p);
+    }
 });
