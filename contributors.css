@@ -1,3 +1,11 @@
+/* 避免侧向溢出 */
+* {
+    box-sizing: border-box;
+}
+html, body {
+    overflow-x: hidden;
+}
+
 /* hero区 */
 .contributors-hero {
     text-align: center;
@@ -71,6 +79,7 @@
 @media (max-width: 500px) {
     .member-grid {
         grid-template-columns: 1fr;
+        justify-items: center; 
     }
 }
 
@@ -153,7 +162,7 @@
     opacity: 0;
     transition: 0.2s;
 
-    pointer-events: none; /* ⭐ 必须 */
+    pointer-events: none;
 }
 
 .member:hover::after {
@@ -165,7 +174,8 @@
 body::after {
     content: "";
     position: fixed;
-    inset: 0;
+    width: 100vw;   /* 👈 关键 */
+    height: 100vh;  /* 👈 关键 */
     background: repeating-linear-gradient(
         transparent,
         transparent 2px,
@@ -173,6 +183,7 @@ body::after {
     )!important;
     pointer-events: none;
     z-index: 999;
+    overflow-x: hidden;
 }
 
 

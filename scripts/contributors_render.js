@@ -39,12 +39,12 @@ function createCard(p) {
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-        div.style.transform = `
-            perspective(600px)
-            rotateY(${x * 10}deg)
-            rotateX(${-y * 10}deg)
-            scale(1.03)
-        `;
+        // div.style.transform = `
+        //     perspective(600px)
+        //     rotateY(${x * 10}deg)
+        //     rotateX(${-y * 10}deg)
+        //     scale(1.03)
+        // `;
 
         div.style.setProperty("--x", `${x * 100 + 50}%`);
         div.style.setProperty("--y", `${y * 100 + 50}%`);
