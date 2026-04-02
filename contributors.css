@@ -224,6 +224,13 @@ body::after {
     background: #3fb950;
 }
 
+.dept-leadership h2 {
+    color: #d2a8ff;
+}
+.dept-leadership h2::after {
+    background: #d2a8ff;
+}
+
 .dept h2::after {
     content: "";
     position: absolute;

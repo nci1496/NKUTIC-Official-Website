@@ -2,6 +2,7 @@ import { contributors } from "./contributors.js";
 
 const coreContainer = document.getElementById("core-members");
 const allContainer = document.getElementById("all-members");
+const leadershipContainer = document.getElementById("leadership-members");
 
 function createCard(p) {
     const div = document.createElement("div");
@@ -39,12 +40,12 @@ function createCard(p) {
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-        // div.style.transform = `
-        //     perspective(600px)
-        //     rotateY(${x * 10}deg)
-        //     rotateX(${-y * 10}deg)
-        //     scale(1.03)
-        // `;
+        div.style.transform = `
+            perspective(600px)
+            rotateY(${x * 10}deg)
+            rotateX(${-y * 10}deg)
+            scale(1.03)
+        `;
 
         div.style.setProperty("--x", `${x * 100 + 50}%`);
         div.style.setProperty("--y", `${y * 100 + 50}%`);
@@ -79,18 +80,21 @@ document.querySelectorAll(".member").forEach(card => {
 
 
 const containers = {
+    leadership: leadershipContainer,
     tech: document.getElementById("tech-members"),
     media: document.getElementById("media-members"),
     ops: document.getElementById("ops-members")
 };
 
 contributors.forEach(p => {
-    const card = createCard(p);
+    if (p.leadership && containers.leadership) {
+        containers.leadership.appendChild(createCard(p));
+    }
 
     const container = containers[p.department];
 
     if (container) {
-        container.appendChild(card);
+        container.appendChild(createCard(p));
     } else {
         console.warn("未知部门:", p);
     }

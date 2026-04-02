@@ -6,6 +6,7 @@ export const contributors = [
     tags: ["C++","Python", "系统设计", "AI"],
     github: "https://github.com/nci1496",
     core: true,
+    leadership: true,
     badge: "俱乐部主席",
     department:"tech"
 },
@@ -16,6 +17,7 @@ export const contributors = [
     tags: [],
     github: "#",
     core: true,
+    leadership: true,
     badge: "团支书",
     department:"tech"
 },
@@ -26,6 +28,7 @@ export const contributors = [
     tags: ["ROS","C++","Matlab"],
     github: "#",
     core: true,
+    leadership: true,
     badge:"副社长",
     department:"tech"
 },
@@ -36,6 +39,7 @@ export const contributors = [
     tags: ["C++", "Python", "计算机网络", "人工智能"],
     github: "#",
     core: true,
+    leadership: true,
     badge: "副社长",
     department: "tech"
 },
@@ -46,7 +50,18 @@ export const contributors = [
     tags: ["H5", "CSS","JavaScript"],
     github: "#",
     core: true,
+    leadership: true,
     badge:"讲师",
+    department:"tech"
+},
+{
+    name: "阮启涵",
+    signature:"专注当下",
+    avatar: "images/avatars/阮启涵.jpg",
+    tags: ["C++","象棋","篮球"],
+    github: "#",
+    core: false,
+    badge:"",
     department:"tech"
 },
 {
@@ -67,6 +82,7 @@ export const contributors = [
     tags: [],
     github: "#",
     core: true,
+    leadership: true,
     badge:"宣传部部长",
     department:"media"
 },
@@ -81,16 +97,16 @@ export const contributors = [
     department:"media"
 },
 {
-    name: "任俊杰",
-    signature: " ",
-    avatar: "images/avatars/默认.jpg",
-    tags: [],
+    name: "Jay Mu | 任俊杰",
+    signature: "爱是生活的支撑",
+    avatar: "images/avatars/任俊杰.jpg",
+    tags: ["诗","浪漫"],
     github: "#",
     core: true,
-    badge:"宣传部部长",
+    leadership: true,
+    badge:"运营部部长",
     department:"ops"
 },
-
 {
     name: "Clash727 | 王子楸",
     signature:"be together，not be same",

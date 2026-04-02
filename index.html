@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="南开大学犀牛鸟创新社团（NKUTIC）：专注软件开发、算法与技术实践，做项目、打比赛、沉淀可复现的成果。">
+    <meta property="og:title" content="南开大学犀牛鸟创新社团 · NKUTIC">
+    <meta property="og:description" content="Build · Explore · Create｜做项目、打比赛、做点真正有用的东西。">
+    <meta property="og:type" content="website">
     <title>南开大学犀牛鸟创新社团</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="fish.css">
@@ -40,11 +44,68 @@
 
 <section id="about">
     <h2>关于我们</h2>
-    <p>
-        我们专注于软件开发、算法设计与技术实践，
-        从 C++ 到 AI，从游戏开发到数学建模，
-        这里是动手做项目的人聚集的地方。
+    <p class="about-lead">
+        Build · Explore · Create —— 把想法落地成<strong>可运行的系统</strong>与<strong>可复现的成果</strong>。
     </p>
+
+    <div class="about-grid">
+        <div class="about-block">
+            <h3 class="subheading">我们是谁</h3>
+            <ul class="about-list">
+                <li>面向软件开发、算法与 AI 的实践型技术社团</li>
+                <li>从 C++ 到 Web，从工程到比赛，核心是“动手做”</li>
+                <li>鼓励分享、协作与沉淀：让努力能被复用</li>
+            </ul>
+        </div>
+
+        <div class="about-block">
+            <h3 class="subheading">我们在做什么</h3>
+            <div class="about-cards">
+                <div class="about-card">
+                    <div class="about-card-title">项目开发</div>
+                    <div class="about-card-desc">做系统、做工具、做能上线的东西</div>
+                </div>
+                <div class="about-card">
+                    <div class="about-card-title">技术分享</div>
+                    <div class="about-card-desc">例会/主题分享，把经验讲清楚</div>
+                </div>
+                <div class="about-card">
+                    <div class="about-card-title">竞赛训练</div>
+                    <div class="about-card-desc">算法/建模/工程赛，一起刷题与复盘</div>
+                </div>
+                <div class="about-card">
+                    <div class="about-card-title">组队协作</div>
+                    <div class="about-card-desc">找队友、找方向，把坑一起填完</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-block">
+            <h3 class="subheading">FAQ</h3>
+            <div class="faq">
+                <div class="faq-item">
+                    <div class="faq-q">需要很强的基础吗？</div>
+                    <div class="faq-a">不需要。我们更看重学习能力与持续投入；你可以从简单任务开始。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">平时会做什么？</div>
+                    <div class="faq-a">例会、项目协作、分享交流、比赛组队与复盘；产出会尽量沉淀成资料。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">时间投入大概多少？</div>
+                    <div class="faq-a">建议每周至少 2–4 小时。忙的时候可以低强度参与，关键是不断档。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-block about-cta">
+            <h3 class="subheading">加入方式</h3>
+            <p class="team-desc">关注公众号：NKUTIC。你也可以先来旁听一次例会，再决定是否加入。</p>
+            <div class="more about-cta-actions">
+                <a href="#join" class="btn-primary">去加入入口</a>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section id="projects">
@@ -63,14 +124,49 @@
     <h2>活动</h2>
     <p>技术例会 / 项目分享 / 比赛组队 / 实战开发 / 腾讯参观 </p>
     <p>写代码、做系统、打比赛、做点真正有用的东西。</p>
+
+    <div class="activity-featured">
+        <h3 class="subheading">近期活动</h3>
+        <div id="featured-activities" class="card-grid"></div>
+    </div>
 </section>
 
 
 <section id="team">
     <h2>团队</h2>
-    <p>由开发者构成的技术社区</p>
+    <p>由开发者构成的技术社区：做项目、办活动、打比赛，一起把想法落地。</p>
 
-    <a class="btn" href="contributors.html">查看成员 →</a>
+    <div class="team-structure">
+        <div class="team-block">
+            <h3 class="subheading">核心领导层</h3>
+            <p class="team-desc">负责社团整体方向、活动规划与跨部门协调。</p>
+            <div id="home-leadership" class="mini-member-grid" aria-label="核心领导层成员"></div>
+        </div>
+
+        <div class="team-block team-dept team-dept-tech">
+            <h3 class="subheading">技术部</h3>
+            <p class="team-desc">项目开发、技术分享、竞赛训练与工程实践。</p>
+            <div id="home-tech" class="mini-member-grid" aria-label="技术部成员"></div>
+        </div>
+
+        <div class="team-block team-dept team-dept-media">
+            <h3 class="subheading">宣传部</h3>
+            <p class="team-desc">内容产出、活动记录、对外传播与视觉呈现。</p>
+            <div id="home-media" class="mini-member-grid" aria-label="宣传部成员"></div>
+        </div>
+
+        <div class="team-block team-dept team-dept-ops">
+            <h3 class="subheading">运营部</h3>
+            <p class="team-desc">活动组织、资源对接、社群运营与流程保障。</p>
+            <div id="home-ops" class="mini-member-grid" aria-label="运营部成员"></div>
+        </div>
+    </div>
+
+    <div class="more">
+        <a href="contributors.html" class="btn-primary">
+            查看成员
+        </a>
+    </div>
 </section>
 
 <section id="join">
