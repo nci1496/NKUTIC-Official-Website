@@ -87,6 +87,26 @@ export const contributors = [
     department:"media"
 },
 {
+    name: "张一辰",
+    signature: "",
+    avatar: "images/avatars/张一辰.jpg",
+    tags: ["C++", "推送"],
+    github: "#",
+    core: true,
+    badge:"宣传部副部长",
+    department:"media"
+},
+{
+    name: "Riverflow | 许佳明",
+    signature: "Positive",
+    avatar: "images/avatars/许佳明.jpg",
+    tags: ["Photography","AI"],
+    github: "#",
+    core: false,
+    badge: "",
+    department:"media"
+},
+{
     name: "李俊辉",
     signature: "时节不居，岁月如流",
     avatar: "images/avatars/李俊辉.jpg",
