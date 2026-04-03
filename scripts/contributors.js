@@ -87,6 +87,16 @@ export const contributors = [
     department:"media"
 },
 {
+    name: "李俊辉",
+    signature: "时节不居，岁月如流",
+    avatar: "images/avatars/李俊辉.jpg",
+    tags: ["C++","gaming"],
+    github: "#",
+    core: false,
+    badge: "",
+    department:"media"
+},
+{
     name: "LiErJ | 李佳琦",
     signature: "摸🐟ing",
     avatar: "images/avatars/LiErJ.jpg",
