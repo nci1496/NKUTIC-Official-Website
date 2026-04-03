@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全部项目 - NKUTIC</title>
+    <meta name="description" content="NKUTIC 项目展示：社团成员开发的软件、可视化与工程实践作品。">
+    <title>全部项目 · NKUTIC</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -13,18 +14,26 @@
     <div class="logo">NKUTIC</div>
     <nav>
         <a href="index.html">首页</a>
+        <a href="contributors.html">成员</a>
+        <a href="index.html#join">加入</a>
     </nav>
 </header>
 
-<main class="projects-page">
+<main class="projects-list-page">
 
-    <section class="page-hero">
+    <nav class="project-breadcrumb" aria-label="面包屑">
+        <a href="index.html">首页</a>
+        <span class="project-breadcrumb-sep">/</span>
+        <span>全部项目</span>
+    </nav>
+
+    <section class="page-hero projects-list-hero">
         <h1>项目展示</h1>
-        <p>我们做过的东西，不只是作业</p>
+        <p class="projects-list-lead">我们做过的东西，不只是作业：从图形与物理模拟到完整小项目，欢迎点开详情看思路、实现与收获。</p>
     </section>
 
-    <section>
-        <div id="all-projects" class="card-grid"></div>
+    <section class="projects-list-body" aria-label="项目列表">
+        <div id="all-projects" class="card-grid projects-list-grid"></div>
     </section>
 
 </main>

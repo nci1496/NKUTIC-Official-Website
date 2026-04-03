@@ -11,15 +11,15 @@ export const contributors = [
     department:"tech"
 },
 {
-    name: "张明宇",
-    signature: "",
-    avatar: "images/avatars/默认.jpg",
-    tags: [],
+    name: "DOCTY | 张明宇",
+    signature: "Code · AI · Game",
+    avatar: "images/avatars/张明宇.jpg",
+    tags: ["Unity","C#","AI","计算机视觉"],
     github: "#",
     core: true,
     leadership: true,
     badge: "团支书",
-    department:"tech"
+    department:"ops"
 },
 {
     name: "Eternal | 王永",
@@ -50,7 +50,7 @@ export const contributors = [
     tags: ["H5", "CSS","JavaScript"],
     github: "#",
     core: true,
-    leadership: true,
+    leadership: false,
     badge:"讲师",
     department:"tech"
 },
@@ -78,7 +78,7 @@ export const contributors = [
 {
     name: "吴佳璐",
     signature: " ",
-    avatar: "images/avatars/默认.jpg",
+    avatar: "images/avatars/吴佳璐.jpg",
     tags: [],
     github: "#",
     core: true,
