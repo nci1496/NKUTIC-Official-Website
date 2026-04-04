@@ -44,6 +44,17 @@ export const contributors = [
     department: "tech"
 },
 {
+    name: "Sky | 王佳霓",
+    signature: "",
+    avatar: "images/avatars/sky.jpg",
+    tags: ["AI硬件"],
+    github: "#",
+    core: true,
+    leadership: false,
+    badge:"副部长",
+    department:"tech"
+},
+{
     name: "庚 | 刘孙延",
     signature: "全欺雪，拂云长",
     avatar: "images/avatars/庚.jpg",
