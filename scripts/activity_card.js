@@ -26,6 +26,10 @@ export function createActivityCard(a) {
     ? a.tags.map(t => `<span class="tag">${t}</span>`).join("")
     : "";
 
+  const detailLink = a?.id && a?.detail
+    ? `<a href="activity_detail.html?id=${encodeURIComponent(a.id)}">活动详情</a>`
+    : "";
+
   const linksHtml = Array.isArray(a?.links)
     ? a.links
         .filter(l => l && l.href && l.label)
@@ -36,6 +40,8 @@ export function createActivityCard(a) {
         .join("")
     : "";
 
+  const mergedButtons = [detailLink, linksHtml].filter(Boolean).join("");
+
   card.innerHTML = `
     ${coverHtml}
     <div class="card-content">
@@ -43,7 +49,7 @@ export function createActivityCard(a) {
       ${metaBits.length ? `<p class="activity-meta">${metaBits.join(" · ")}</p>` : ""}
       <p>${a?.desc ?? ""}</p>
       <div class="tags">${tagsHtml}</div>
-      ${linksHtml ? `<div class="card-buttons">${linksHtml}</div>` : ""}
+      ${mergedButtons ? `<div class="card-buttons">${mergedButtons}</div>` : ""}
     </div>
   `;
 
